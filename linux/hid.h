@@ -153,74 +153,82 @@ inline void hid_err(struct hid_device *hdev, const char* msg, ...) {
 	va_end(args);
 }
 
-inline int razer_probe(struct hid_device *hdev, const struct hid_device_id *id) {
-	printf("rzer_probe\n");
-	return 0;
-}
-
-inline void openChromaDevice(struct hid_device** hdev, unsigned int* numHdev, char* name, unsigned int vid, unsigned int pid) {
-	printf("device %04X:%04X start!\n", vid, pid);
+inline void openChromaDevice(struct hid_device** hdev, unsigned int* numHdev, struct hid_driver hdr) {
 	for (struct usb_bus* bus = usb_get_busses(); bus; bus = bus->next) {
 		for (struct usb_device* dev = bus->devices; dev; dev = dev->next) {
-			if (dev->descriptor.idVendor == vid && dev->descriptor.idProduct == pid) {
-				struct usb_dev_handle* udev;
-				if (udev = usb_open(dev)) {
-					struct usb_config_descriptor* config_descriptor;
-					if (dev->descriptor.bNumConfigurations && (config_descriptor = &dev->config[0])) {
-						for (int intfIndex = 0; intfIndex < config_descriptor->bNumInterfaces; intfIndex++) {
-							if (config_descriptor->interface[intfIndex].num_altsetting) {
-								struct usb_interface_descriptor* intf = &config_descriptor->interface[intfIndex].altsetting[0];
-								if (intf->bInterfaceNumber == 0 && intf->bAlternateSetting == 0) {
-									struct hid_device* h = (struct hid_device*)realloc(*hdev, (*numHdev+1) * sizeof(struct hid_device));
-									if (!h) {
-										printf("out of memory\n");
-										return;
+			for (unsigned int  i = 0; hdr.id_table[i].vendor != 0; i++) {
+				unsigned int vid = hdr.id_table[i].vendor;
+				unsigned int pid = hdr.id_table[i].product;
+				if (dev->descriptor.idVendor == vid && dev->descriptor.idProduct == pid) {
+					struct usb_dev_handle* udev;
+					if (udev = usb_open(dev)) {
+						struct usb_config_descriptor* config_descriptor;
+						if (dev->descriptor.bNumConfigurations && (config_descriptor = &dev->config[0])) {
+							for (int intfIndex = 0; intfIndex < config_descriptor->bNumInterfaces; intfIndex++) {
+								if (config_descriptor->interface[intfIndex].num_altsetting) {
+									struct usb_interface_descriptor* intf = &config_descriptor->interface[intfIndex].altsetting[0];
+									if (intf->bInterfaceNumber == 0 && intf->bAlternateSetting == 0) {
+										printf("device %04X:%04X opened!\n", vid, pid);
+										struct hid_device* h = (struct hid_device*)realloc(*hdev, (*numHdev+1) * sizeof(struct hid_device));
+										if (!h) {
+											printf("out of memory\n");
+											return;
+										}
+										(*hdev) = h;
+										struct hid_device h2;
+										h2.dev.parent = dev;
+										h2.dev.init_name = hdr.name;
+										h2.status = 1;
+										h2.driver = &hdr;
+										dev->dev = udev; // use this for the handle
+										/*
+										h2.driver = (struct hid_driver*)malloc(sizeof(struct hid_driver));
+										h2.driver->name = hdr.name;
+										struct hid_device_id id;
+										id.vendor = vid;
+										id.product = pid;
+										h2.driver->id_table = &id;
+										*/
+										/*
+										h2.driver->probe = razer_probe;
+										h2.ll_driver = (struct hid_ll_driver*)malloc(sizeof(struct hid_ll_driver));
+										h2.ll_driver->parse = ll_parse;
+										h2.ll_driver->start = ll_start;
+										h2.ll_driver->stop = ll_stop;
+
+
+										//hdev->driver->probe(hdev, id);
+										*/
+
+
+										/*
+										config_descriptor->interface[intfIndex].cur_altsetting = (struct usb_cur_altsetting*)malloc(sizeof(struct usb_cur_altsetting));
+										config_descriptor->interface[intfIndex].cur_altsetting->desc = config_descriptor->interface[intfIndex].altsetting[0];
+										if (strcmp(h2.driver->name, "razerkbd")==0)
+											config_descriptor->interface[intfIndex].cur_altsetting->desc.bInterfaceProtocol = USB_INTERFACE_PROTOCOL_MOUSE;
+										h2.driver->probe(&h2, &hdr.id_table[i]);
+										*/
+
+
+
+										(*hdev)[*numHdev] = h2;
+										(*numHdev)++;
+									} else {
+										usb_close(udev);
 									}
-									(*hdev) = h;
-
-									printf("device %04X:%04X opened!\n", vid, pid);
-									struct hid_device h2;
-									h2.driver = (struct hid_driver*)malloc(sizeof(struct hid_driver));
-									struct hid_device_id id;
-									id.vendor = vid;
-									id.product = pid;
-									h2.driver->id_table = &id;
-									h2.driver->name = name;
-									h2.dev.parent = dev;
-									h2.dev.init_name = h2.driver->name;
-									h2.status = 1;
-									h2.driver->probe = razer_probe;
-									h2.ll_driver = (struct hid_ll_driver*)malloc(sizeof(struct hid_ll_driver));
-									h2.ll_driver->parse = ll_parse;
-									h2.ll_driver->start = ll_start;
-									h2.ll_driver->stop = ll_stop;
-									config_descriptor->interface[intfIndex].cur_altsetting = (struct usb_cur_altsetting*)malloc(sizeof(struct usb_cur_altsetting));
-									config_descriptor->interface[intfIndex].cur_altsetting->desc = config_descriptor->interface[intfIndex].altsetting[0];
-
-									if (strcmp(h2.driver->name, "razerkbd")==0)
-										config_descriptor->interface[intfIndex].cur_altsetting->desc.bInterfaceProtocol = USB_INTERFACE_PROTOCOL_MOUSE;
-
-									//hdev->driver->probe(hdev, id);
-									dev->dev = udev;
-									//dev->dev = hdev;
-									(*hdev)[*numHdev] = h2;
-									(*numHdev)++;
 								} else {
 									usb_close(udev);
 								}
-							} else {
-								usb_close(udev);
 							}
+						} else {
+							usb_close(udev);
 						}
-					} else {
-						usb_close(udev);
 					}
 				}
+				if (!numHdev)
+					printf("device %04X:%04X NOT opened!\n", vid, pid);
 			}
 		}
-	}
-	if (!numHdev) {
-		printf("device %04X:%04X NOT opened!\n", vid, pid);
 	}
 }
 

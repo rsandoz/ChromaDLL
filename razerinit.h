@@ -9,6 +9,6 @@
 #define DRIVER_RAZERINIT_H_
 
 __declspec(dllexport) void init();
-__declspec(dllexport) void close(struct usb_dev_handle* deviceHandle);
+__declspec(dllexport) void close(struct device *dev);
 
 #endif /* DRIVER_RAZERINIT_H_ */

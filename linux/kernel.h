@@ -3,6 +3,11 @@
 
 #include <windows.h>
 
+//TBD move these into project settings or find a condition to set this
+//#define DLL_INTERNAL extern
+#define DLL_INTERNAL __declspec( dllexport )
+//#define DLL_INTERNAL __declspec( dllimport )
+
 #define u8 unsigned char
 #define u16 unsigned short
 #define u32 unsigned int

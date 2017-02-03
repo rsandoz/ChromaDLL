@@ -552,6 +552,7 @@ static void razer_firefly_disconnect(struct hid_device *hdev)
 static const struct hid_device_id razer_devices[] = {
     { HID_USB_DEVICE(USB_VENDOR_ID_RAZER,USB_DEVICE_ID_RAZER_FIREFLY) },
 #if defined(WIN32) || defined(_WIN64)
+    { 0 }
 #else
     { }
 #endif

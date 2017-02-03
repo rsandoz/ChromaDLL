@@ -162,9 +162,9 @@ struct razer_kraken_response_report {
 #undef DEVICE_ATTR
 #define DEVICE_ATTR(_name, _mode, _show, _store) DEVICE_ATTR1(kraken, _name, _mode, _show, _store)
 //TBD (RazerSDK namespace, headset, indicates a custom mode should be available) 
-__declspec(dllexport) unsigned int init_razer_kraken_driver(struct hid_device** hdev);
-//TBD extern struct device_attribute devkraken_attr_matrix_effect_custom;
-//TBD extern struct device_attribute devkraken_attr_matrix_custom_frame;
+DLL_INTERNAL unsigned int init_razer_kraken_driver(struct hid_device** hdev);
+//TBD DLL_INTERNAL struct device_attribute devkraken_attr_matrix_effect_custom;
+//TBD DLL_INTERNAL struct device_attribute devkraken_attr_matrix_custom_frame;
 #endif
 
 #endif

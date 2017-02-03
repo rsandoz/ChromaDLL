@@ -5,8 +5,11 @@
  * any later version.
  */
 
+#include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/hid.h>
+
 #include "razerinit.h"
-#include "lusb0_usb.h"
 
 void init() {
 	// Initialize the library.
@@ -19,6 +22,9 @@ void init() {
 	usb_find_devices();
 }
 
-void close(struct usb_dev_handle* deviceHandle) {
-	usb_close(deviceHandle);
+void close(struct device *dev) {
+	struct usb_interface *intf = to_usb_interface(dev->parent);
+	struct usb_device *usb_dev = interface_to_usbdev(intf);
+	usb_close((struct usb_dev_handle*)usb_dev->dev);
+	//usb_close(dev->parent->dev);
 }

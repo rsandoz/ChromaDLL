@@ -33,12 +33,14 @@ inline int usb_control_msg1(
 #define usb_control_msg usb_control_msg1 
 
 inline struct usb_interface *to_usb_interface(struct usb_device *parent) {
-	parent->config->interface->dev = parent;
-	return parent->config->interface;
+//	parent->config->interface->dev = parent;
+//	return parent->config->interface;
+	return (struct usb_interface*)parent;
 }
 
 inline struct usb_device *interface_to_usbdev(struct usb_interface *intf) {
-	return intf->dev;
+//	return intf->dev;
+	return (struct usb_device*)intf;
 }
 
 inline void usb_disable_autosuspend(struct usb_device *usb_dev) {
@@ -82,9 +84,7 @@ inline void device_remove_file(struct device *device, struct device_attribute *e
 unsigned int init_##hdr## (struct hid_device** hdevo) {	\
 	unsigned int numHdevs = 0; \
 	struct hid_device* hdev = NULL; \
-	for (int i = 0; i < sizeof(razer_devices)/sizeof(razer_devices[0]); i++) { \
-		openChromaDevice(&hdev, &numHdevs, hdr.name, razer_devices[i].vendor, razer_devices[i].product); \
-	} \
+	openChromaDevice(&hdev, &numHdevs, hdr); \
 	*hdevo = hdev; \
 	return numHdevs; \
 }
