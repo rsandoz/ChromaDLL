@@ -168,7 +168,6 @@ struct razer_report razer_chroma_standard_get_led_effect(unsigned char variable_
     return report;
 }
 
-
 /**
  * Set the brightness of an LED on the device
  * 
