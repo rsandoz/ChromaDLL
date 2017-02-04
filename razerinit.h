@@ -8,7 +8,7 @@
 #ifndef DRIVER_RAZERINIT_H_
 #define DRIVER_RAZERINIT_H_
 
-__declspec(dllexport) void init();
-__declspec(dllexport) void close(struct device *dev);
+DLL_INTERNAL void init();
+DLL_INTERNAL void close(struct device *dev);
 
 #endif /* DRIVER_RAZERINIT_H_ */
