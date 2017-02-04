@@ -17,13 +17,14 @@
  * e-mail - mail your message to Terry Cain <terry@terrys-home.co.uk>
  */
 
+
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/usb/input.h>
 #include <linux/hid.h>
-	
+
 #include "razercommon.h"
 #include "razerfirefly_driver.h"
 #include "razerchromacommon.h"
@@ -45,14 +46,22 @@ MODULE_LICENSE(DRIVER_LICENSE);
 /**
  * Send report to the firefly
  */
-static int razer_get_report(struct usb_device *usb_dev, struct razer_report *request_report, struct razer_report *response_report) {
+//LNK2005 already defined in razer*_driver.obj
+#if defined(WIN32) || defined(_WIN64)
+static
+#endif
+int razer_get_report(struct usb_device *usb_dev, struct razer_report *request_report, struct razer_report *response_report) {
     return razer_get_usb_response(usb_dev, 0x00, request_report, 0x00, response_report, RAZER_FIREFLY_WAIT_MIN_US, RAZER_FIREFLY_WAIT_MAX_US);
 }
 
 /**
  * Function to send to device, get response, and actually check the response
  */
-static struct razer_report razer_send_payload(struct usb_device *usb_dev, struct razer_report *request_report)
+//LNK2005 already defined in razer*_driver.obj
+#if defined(WIN32) || defined(_WIN64)
+static
+#endif
+struct razer_report razer_send_payload(struct usb_device *usb_dev, struct razer_report *request_report)
 {
 	int retval = -1;
     struct razer_report response_report;
@@ -426,6 +435,10 @@ static ssize_t razer_attr_read_device_mode(struct device *dev, struct device_att
  * Write only is 0220
  * Read and write is 0664
  */
+#if defined(WIN32) || defined(_WIN64)
+#undef DEVICE_ATTR
+#define DEVICE_ATTR(_name, _mode, _show, _store) DEVICE_ATTR1(firefly, _name, _mode, _show, _store)
+#endif
 static DEVICE_ATTR(firmware_version,        0440, razer_attr_read_get_firmware_version, NULL);
 static DEVICE_ATTR(device_type,             0440, razer_attr_read_device_type,          NULL);
 static DEVICE_ATTR(device_serial,           0440, razer_attr_read_get_serial,           NULL);
@@ -551,6 +564,7 @@ static void razer_firefly_disconnect(struct hid_device *hdev)
  */
 static const struct hid_device_id razer_devices[] = {
     { HID_USB_DEVICE(USB_VENDOR_ID_RAZER,USB_DEVICE_ID_RAZER_FIREFLY) },
+// C2059: syntax error: '}'
 #if defined(WIN32) || defined(_WIN64)
     { 0 }
 #else

@@ -44,6 +44,7 @@ struct razer_kraken_device {
     unsigned char firmware_version[3];
     
     u8 data[33];
+    
 };
 
 union razer_kraken_effect_byte {
@@ -158,9 +159,10 @@ struct razer_kraken_response_report {
     unsigned char arguments[36];
 };
 
-#if defined(WIN32) || defined(_WIN64)
-#undef DEVICE_ATTR
-#define DEVICE_ATTR(_name, _mode, _show, _store) DEVICE_ATTR1(kraken, _name, _mode, _show, _store)
-#endif
+
+
+
+
+
 
 #endif

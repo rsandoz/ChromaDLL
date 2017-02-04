@@ -91,9 +91,4 @@ struct razer_mouse_device {
 // 14      --->  Logo LED
 // 15      --->  Scroll LED
 
-#if defined(WIN32) || defined(_WIN64)
-#undef DEVICE_ATTR
-#define DEVICE_ATTR(_name, _mode, _show, _store) DEVICE_ATTR1(mouse, _name, _mode, _show, _store)
-#endif
-
 #endif
