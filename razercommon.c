@@ -13,6 +13,7 @@
 #include <linux/init.h>
 #include <linux/hid.h>
 
+
 #include "razercommon.h"
 
 /**
