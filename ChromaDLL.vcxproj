@@ -139,14 +139,14 @@
     <ClCompile Include="razermug_driver.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="linux\dmi.h" />
-    <ClInclude Include="linux\hid.h" />
-    <ClInclude Include="linux\init.h" />
-    <ClInclude Include="linux\kernel.h" />
-    <ClInclude Include="linux\module.h" />
-    <ClInclude Include="linux\random.h" />
-    <ClInclude Include="linux\slab.h" />
-    <ClInclude Include="linux\usb\input.h" />
+    <ClInclude Include="winlinux\dmi.h" />
+    <ClInclude Include="winlinux\hid.h" />
+    <ClInclude Include="winlinux\init.h" />
+    <ClInclude Include="winlinux\kernel.h" />
+    <ClInclude Include="winlinux\module.h" />
+    <ClInclude Include="winlinux\random.h" />
+    <ClInclude Include="winlinux\slab.h" />
+    <ClInclude Include="winlinux\usb\input.h" />
     <ClInclude Include="lusb0_usb.h" />
     <ClInclude Include="razerchromacommon.h" />
     <ClInclude Include="razercommon.h" />
