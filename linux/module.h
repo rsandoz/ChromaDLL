@@ -72,7 +72,7 @@ inline void device_remove_file(struct device *device, struct device_attribute *e
 // Hack to turn Linux device macros into API calls
 #define DEVICE_ATTR1(_device,_name, _mode, _show, _store)	\
 	struct device_attribute dev_attr_##_name; \
-	struct device_attribute dev##_device##_attr_##_name = {	\
+	DLL_INTERNAL struct device_attribute dev##_device##_attr_##_name = {	\
           .name = __stringify(_name)				\
         , .show   = _show							\
         , .store  = _store							\
@@ -81,7 +81,7 @@ inline void device_remove_file(struct device *device, struct device_attribute *e
 #define MODULE_DEVICE_TABLE(type, name)
 
 #define module_hid_driver(hdr) \
-unsigned int init_##hdr## (struct hid_device** hdevo) {	\
+DLL_INTERNAL unsigned int init_##hdr## (struct hid_device** hdevo) {	\
 	unsigned int numHdevs = 0; \
 	struct hid_device* hdev = NULL; \
 	openChromaDevice(&hdev, &numHdevs, hdr); \

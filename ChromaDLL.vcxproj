@@ -152,7 +152,6 @@
     <ClInclude Include="razercommon.h" />
     <ClInclude Include="razercore_driver.h" />
     <ClInclude Include="razerfirefly_driver.h" />
-    <ClInclude Include="razerinit.h" />
     <ClInclude Include="razerkbd_driver.h" />
     <ClInclude Include="razerkraken_driver.h" />
     <ClInclude Include="razermouse_driver.h" />

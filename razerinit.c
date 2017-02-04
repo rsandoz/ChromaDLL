@@ -9,9 +9,7 @@
 #include <linux/module.h>
 #include <linux/hid.h>
 
-#include "razerinit.h"
-
-void init() {
+DLL_INTERNAL void init() {
 	// Initialize the library.
 	usb_init();
 
@@ -22,7 +20,7 @@ void init() {
 	usb_find_devices();
 }
 
-void close(struct device *dev) {
+DLL_INTERNAL void close(struct device *dev) {
 	struct usb_interface *intf = to_usb_interface(dev->parent);
 	struct usb_device *usb_dev = interface_to_usbdev(intf);
 	usb_close((struct usb_dev_handle*)usb_dev->dev);

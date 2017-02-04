@@ -94,9 +94,6 @@ struct razer_mouse_device {
 #if defined(WIN32) || defined(_WIN64)
 #undef DEVICE_ATTR
 #define DEVICE_ATTR(_name, _mode, _show, _store) DEVICE_ATTR1(mouse, _name, _mode, _show, _store)
-DLL_INTERNAL unsigned int init_razer_mouse_driver(struct hid_device** hdev);
-DLL_INTERNAL struct device_attribute devmouse_attr_matrix_effect_custom;
-DLL_INTERNAL struct device_attribute devmouse_attr_matrix_custom_frame;
 #endif
 
 #endif

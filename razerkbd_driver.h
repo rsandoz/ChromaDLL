@@ -159,9 +159,6 @@ struct razer_kbd_device {
 #if defined(WIN32) || defined(_WIN64)
 #undef DEVICE_ATTR
 #define DEVICE_ATTR(_name, _mode, _show, _store) DEVICE_ATTR1(kbd, _name, _mode, _show, _store)
-DLL_INTERNAL unsigned int init_razer_kbd_driver(struct hid_device** hdev);
-DLL_INTERNAL struct device_attribute devkbd_attr_matrix_effect_custom;
-DLL_INTERNAL struct device_attribute devkbd_attr_matrix_custom_frame;
 #endif
 
 #endif
